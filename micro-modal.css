@@ -1,0 +1,49 @@
+#modal-overlay {
+	position: fixed;
+	z-index:100;
+	top: 0px;
+	left: 0px;
+	height:100%;
+	width:100%;
+	background: #000;
+	display: none;
+}
+
+#modal-window {
+    position: fixed;
+    z-index: 102;
+    display:none;
+    top:50%;
+    left:50%;
+    background-color:white;
+}
+#modal-window img 
+{
+    display: block;
+    border: 3px solid #ccc;
+}
+#modal-load{
+    position: fixed;
+    height:13px;
+    width:208px;
+    background: url(loadingAnimation.gif) no-repeat;
+    z-index:103;
+    top: 50%;
+    left: 50%;
+    margin: -6px 0 0 -104px; /* -height/2 0 0 -width/2 */
+}
+
+* html #modal-overlay { /* ie6 hack */
+    position: absolute;
+    height: expression(document.body.scrollHeight > 
+            document.body.offsetHeight ? 
+            document.body.scrollHeight : 
+            document.body.offsetHeight   'px');
+}
+* html #modal-window,
+* html #modal-load { /* ie6 hack */
+    position: absolute;
+    margin-top: expression(0 - parseInt(this.offsetHeight / 2)
+    (TBWindowMargin = document.documentElement &amp;&amp; 
+    document.documentElement.scrollTop || document.body.scrollTop) 'px');
+}
