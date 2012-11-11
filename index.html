@@ -9,9 +9,13 @@
 		<div class="row">
 			<div class="span12">
 				<h1> Using micro-modal </h1>
+				<p>In the course of working on a freelance project, I took the time to build this as an example for how I was going to add modal functionality to the client's site.</p>
 			</div>
 		</div>
 		<div class="row">
+			<div class="span12">
+				<h2>Adding a Modal-activator</h2>
+			</div>
 			<div class="span8">
 				<p>It only takes a small amount of code to activate a modal</p>
 				<pre>&lt;a class="btn" href="#modal-window"&gt;Activate Modal Window&lt;/a&gt;
@@ -20,7 +24,28 @@
 &lt;/script&gt;</pre>
 			</div>
 			<div class="span4">
-				<a class="btn" href="#modal-window">Activate Modal Window</a>
+				<div id="example1-modal">
+					<h2>This is the modal heading</h2>
+					<p>This is the text of the modal</p>
+				</div>
+				<a class="btn" href="#modal-window" data-load-uri="#example1-modal">Activate Modal Window</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span12"><h2>Adding a close butting</h2></div>
+			<div class="span8">
+				<p>Again very little code is required:</p>
+				<pre>$(selector).on('click',function(){ 
+	$(this).parents('#modal-window, .modal-window').trigger('do-close'); 
+});</pre>
+			</div>
+			<div class="span4">
+				<div id="example2-modal">
+					<h2>This is the modal heading</h2>
+					<p>This is the text of the modal</p>
+					<a class="btn btn-alert" href="#modal-close">&times;</a>
+				</div>
+				<a class="btn" href="#modal-window" data-load-uri="#example2-modal">Activate Modal Window</a>
 			</div>
 		</div>
 		<div id="modal-window" class="span8 buffered">
@@ -34,9 +59,9 @@
 	<script src="micro-modal.js"></script>
 	<script>
 		$(function(){ $('.btn[href=#modal-window]').modalPanel(); })
-		$(function(){ $('.btn[href=#modal-close]').on('click',function(){
+		$(function(){ $(document).on('click','#modal-window .btn[href=#modal-close], .modal-window .btn[href=#modal-close]',function(){
 				$(this).parents('#modal-window, .modal-window').trigger('do-close');
-			}); 
+			})
 		})
 	</script>
 </body>
