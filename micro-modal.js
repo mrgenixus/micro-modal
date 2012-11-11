@@ -1,14 +1,26 @@
 $(function(){
 	//Create our overlay object
 	var overlay = $("<div id='modal-overlay'></div>");
-	var last_style = document.styleSheets[document.styleSheets.length -1];
-	var modalActivate = function(e) {
+	var setModalContent = function(content){
+		modalWindow.html(content);
+	}
+	
+	var modalActivate = function(e){
+		var modal_uri = $(this).data('load-uri'); 
+		if(modal_uri) resolve_content(modal_uri,function(data){
+			setModalContent(data);
+			_modalActivate.call(this,e);
+		});
+		else _modalActivate.call(this,e);
+	}
 
+	var _modalActivate = function(e) {
 		//Append the overlay to the document body
 		$("body").append(overlay.click(function() { 
 		  modalHide(); 
 		}))
 
+		
 		load_modal_content();
 
 		if (typeof document.body.style.maxHeight === "undefined") { //if IE 6
@@ -20,7 +32,13 @@ $(function(){
 		overlay.fadeIn(150);
 
 		//Prevent the anchor link from loading
-		e.preventDefault();
+		try {
+			e.preventDefault();
+			e.stopPropagation();	
+		} catch(err){
+			console.log(e,err,arguments);
+		}
+		
 
 		//Activate a listener 
 		$(document).keydown(handleEscape);		
@@ -48,12 +66,22 @@ $(function(){
 	}
 
 	var modalWindow = $('#modal-window')
-
-	if(modalWindow.length == 0) $('<div id="modal-window">').appendTo(document.body);
-
 	modalWindow.on('contentChanged',modalActivate);
 
+	var resolve_content = function(load_uri,callback){
+		if($(load_uri).length > 0) callback($(load_uri).first().html());
+		else {
+			var uri = load_uri.split(' ').shift();
+			$.get(uri,function(data){
+				if(load_uri.split(' ').length > 1) data = data.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'');
+				var content = $('<div>').html(data).find(load_uri.split(' ').slice(1).join(' ')).html();
+				callback(content); 
+			});
+		}
+	}
+
 	var load_modal_content = function () {
+		if(modalWindow.length == 0) $('<div id="modal-window">').appendTo(document.body);
 		modalWindow.show();
 	    var windowWidth = modalWindow.width() / 2 ;
 	    var windowHeight = modalWindow.height() / 2;
@@ -63,21 +91,17 @@ $(function(){
 	        "margin-top": -windowHeight
 	    });
 	    modalWindow.fadeIn(150);
+	    modalWindow.on('do-close',modalHide);
 	}
 
 	$.fn.extend({
 		modalPanel: function() {
-
-			
-			
-
 			return this.each(function() {
-
 			  //Listen for clicks on objects passed to the plugin
-			  $(this).click(e);
+			  $($(this).data('load-uri')).hide();
+			  $(this).click(modalActivate).trigger('modal-initialized');
 			});
-
 		}
-		});
+	});
 
 })

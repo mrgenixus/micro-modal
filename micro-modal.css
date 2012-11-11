@@ -9,7 +9,7 @@
 	display: none;
 }
 
-#modal-window {
+#modal-window, .modal-window {
     position: fixed;
     z-index: 102;
     display:none;
@@ -22,7 +22,7 @@
     display: block;
     border: 3px solid #ccc;
 }
-#modal-load{
+#modal-load {
     position: fixed;
     height:13px;
     width:208px;
@@ -40,10 +40,15 @@
             document.body.scrollHeight : 
             document.body.offsetHeight   'px');
 }
-* html #modal-window,
+* html #modal-window, * html ..modal-window,
 * html #modal-load { /* ie6 hack */
     position: absolute;
     margin-top: expression(0 - parseInt(this.offsetHeight / 2)
     (TBWindowMargin = document.documentElement &amp;&amp; 
     document.documentElement.scrollTop || document.body.scrollTop) 'px');
+}
+
+#modal-window.buffered {
+    padding: 4em;
+    border-radius:4em;
 }
