@@ -1,7 +1,6 @@
 $(function(){
 	//Create our overlay object
 	var overlay = $("<div id='modal-overlay'></div>");
-	var last_style = document.styleSheets[document.styleSheets.length -1];
 	var modalActivate = function(e) {
 
 		//Append the overlay to the document body
@@ -9,6 +8,8 @@ $(function(){
 		  modalHide(); 
 		}))
 
+		var modal_uri = $(this).data('load-uri');
+		console.log(modal_uri);
 		load_modal_content();
 
 		if (typeof document.body.style.maxHeight === "undefined") { //if IE 6
@@ -48,12 +49,11 @@ $(function(){
 	}
 
 	var modalWindow = $('#modal-window')
-
-	if(modalWindow.length == 0) $('<div id="modal-window">').appendTo(document.body);
-
 	modalWindow.on('contentChanged',modalActivate);
 
-	var load_modal_content = function () {
+	var load_modal_content = function (load_uri) {
+		if(load_uri != undefined) modalWindow.load(load_uri);
+		if(modalWindow.length == 0) $('<div id="modal-window">').appendTo(document.body);
 		modalWindow.show();
 	    var windowWidth = modalWindow.width() / 2 ;
 	    var windowHeight = modalWindow.height() / 2;
@@ -63,21 +63,16 @@ $(function(){
 	        "margin-top": -windowHeight
 	    });
 	    modalWindow.fadeIn(150);
+	    modalWindow.on('do-close',modalHide);
 	}
 
 	$.fn.extend({
 		modalPanel: function() {
-
-			
-			
-
 			return this.each(function() {
-
 			  //Listen for clicks on objects passed to the plugin
-			  $(this).click(e);
+			  $(this).click(modalActivate).trigger('modal-initialized');
 			});
-
 		}
-		});
+	});
 
 })

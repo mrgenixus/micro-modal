@@ -1,0 +1,43 @@
+<html>
+<head>
+	<title>Using micro-modal</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="micro-modal.css" type="text/css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+				<h1> Using micro-modal </h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span8">
+				<p>It only takes a small amount of code to activate a modal</p>
+				<pre>&lt;a class="btn" href="#modal-window"&gt;Activate Modal Window&lt;/a&gt;
+&lt;script&gt;
+	$(function(){ $('.btn[href=#modal-window]').modalPanel(); })
+&lt;/script&gt;</pre>
+			</div>
+			<div class="span4">
+				<a class="btn" href="#modal-window">Activate Modal Window</a>
+			</div>
+		</div>
+		<div id="modal-window" class="span8 buffered">
+			<h2>This is the modal heading</h2>
+			<p>This is the text of the modal</p>
+			<a class="btn btn-alert" href="#modal-close">&times;</a>
+		</div>
+	</div>
+	<script src="jquery-1.8.0.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="micro-modal.js"></script>
+	<script>
+		$(function(){ $('.btn[href=#modal-window]').modalPanel(); })
+		$(function(){ $('.btn[href=#modal-close]').on('click',function(){
+				$(this).parents('#modal-window, .modal-window').trigger('do-close');
+			}); 
+		})
+	</script>
+</body>
+</html>
